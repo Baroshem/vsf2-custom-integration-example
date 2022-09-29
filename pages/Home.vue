@@ -70,12 +70,14 @@ import {
   ref,
   useContext,
   onMounted,
+  ssrRef
 } from '@nuxtjs/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 import { useCache, CacheTagPrefix } from '@vue-storefront/cache';
 import { SfBanner, SfBannerGrid } from '@storefront-ui/vue';
 import HeroSection from '~/components/HeroSection.vue';
 import LoadWhenVisible from '~/components/utils/LoadWhenVisible.vue';
+import { useTodos } from '~/integrations/jsonplaceholder/src/composables/useTodos'
 
 export default defineComponent({
   name: 'HomePage',
@@ -93,7 +95,15 @@ export default defineComponent({
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
     const { addTags } = useCache();
-    const { app } = useContext();
+    const { app, $vsf } = useContext();
+    // const todos = ssrRef([]);
+        const id = 1;
+    const {
+			todos,
+			loading: loadingTodos,
+			error: todosError,
+			search: searchTodos
+		} = useTodos(id);
     const year = new Date().getFullYear();
     const { isDesktop } = app.$device;
     const hero = ref({
@@ -193,7 +203,9 @@ export default defineComponent({
       },
     });
 
-    onMounted(() => {
+    onMounted(async () => {
+      // todos.value = await $vsf.$jsonplaceholder.api.searchTodos({ id: 1 })
+      await searchTodos({ id });
       addTags([{ prefix: CacheTagPrefix.View, value: 'home' }]);
     });
 
