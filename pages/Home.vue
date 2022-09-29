@@ -214,6 +214,7 @@ export default defineComponent({
       banners,
       callToAction,
       hero,
+      todos
     };
   },
 });
