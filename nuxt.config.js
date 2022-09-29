@@ -96,6 +96,7 @@ export default () => {
       }],
       '@nuxt/image',
       '@pinia/nuxt',
+      "~/integrations/jsonplaceholder/nuxt"
     ],
     modules: [
       '~/modules/catalog',
